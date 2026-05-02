@@ -17,11 +17,11 @@ export default {
                 .setDescription("The priority level for the ticket.")
                 .setRequired(true)
                 .addChoices(
-                    { name: "🔴 Неотложный", value: "Неотложный" },
-                    { name: "🟠 Высокий", value: "Высокий" },
-                    { name: "🟡 Средний", value: "Средний" },
-                    { name: "🟢 Низкий", value: "Низкий" },
-                    { name: "⚪ Никто", value: "Никто" },
+                    { name: "🔴 Urgent", value: "urgent" },
+                    { name: "🟠 High", value: "high" },
+                    { name: "🟡 Medium", value: "medium" },
+                    { name: "🟢 Low", value: "low" },
+                    { name: "⚪ None", value: "none" },
                 ),
             )
         .setDMPermission(false),
@@ -40,8 +40,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал продажи билетов",
-                            "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -51,8 +51,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "В разрешении отказано",
-                            "Вам нужен `Управление каналами` разрешение или настроенный `Роль билетного support` чтобы изменить приоритет заявки, выполните следующие действия.",
+                            "Permission Denied",
+                            "You need the `Manage Channels` permission or the configured `Ticket Staff Role` to change ticket priority.",
                         ),
                     ],
                 });
@@ -62,7 +62,7 @@ export default {
             const result = await updateTicketPriority(interaction.channel, priorityLevel, interaction.user);
             
             if (!result.success) {
-                logger.warn('Не удалось выполнить приоритетное обновление - недействительный канал подачи заявок', {
+                logger.warn('Priority update failed - not a valid ticket channel', {
                     userId: interaction.user.id,
                     channelId: interaction.channel.id,
                     guildId: interaction.guildId,
@@ -71,8 +71,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал продажи билетов",
-                            result.error || "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            result.error || "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -87,7 +87,7 @@ export default {
                 ],
             });
 
-            logger.info('Приоритет заявки успешно обновлен', {
+            logger.info('Ticket priority updated successfully', {
                 userId: interaction.user.id,
                 userTag: interaction.user.tag,
                 channelId: interaction.channel.id,
@@ -98,7 +98,7 @@ export default {
             });
 
         } catch (error) {
-            logger.error('Ошибка при выполнении приоритетной команды', {
+            logger.error('Error executing priority command', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -113,7 +113,3 @@ export default {
         }
     },
 };
-
-
-
-

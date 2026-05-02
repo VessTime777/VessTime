@@ -48,14 +48,14 @@ function buildDashboardEmbed(config, guild) {
         .setDescription(`Manage ticket system settings for **${guild.name}**.\nSelect an option below to modify a setting.`)
         .setColor(getColor('info'))
         .addFields(
-            { name: '📢 Panel Channel', value: panelChannel, inline: true },
-            { name: '🛡️ Staff Role', value: staffRole, inline: true },
+            { name: '📢 Канал панели', value: panelChannel, inline: true },
+            { name: '🛡️ Роль Staff', value: staffRole, inline: true },
             { name: '\u200B', value: '\u200B', inline: true },
-            { name: '📁 Open Tickets Category', value: openCategory, inline: true },
-            { name: '📂 Closed Tickets Category', value: closedCategory, inline: true },
+            { name: '📁 Открытие тикеты', value: openCategory, inline: true },
+            { name: '📂 Закрытие тикеты', value: closedCategory, inline: true },
             { name: '\u200B', value: '\u200B', inline: true },
-            { name: '📝 Panel Message', value: panelMsg, inline: false },
-            { name: '🏷️ Button Label', value: btnLabel, inline: true },
+            { name: '📝 Сообщение на панели управления', value: panelMsg, inline: false },
+            { name: '🏷️ Название кнопки', value: btnLabel, inline: true },
             { name: '🔢 Max Tickets/User', value: String(config.maxTicketsPerUser || 3), inline: true },
             { name: '📬 DM on Close', value: config.dmOnClose !== false ? '✅ Enabled' : '❌ Disabled', inline: true },
             { name: '🎫 Ticket Logs Channel', value: ticketLogsChannel, inline: true },
@@ -172,7 +172,7 @@ async function updateLivePanel(client, guild, config) {
                 .setCustomId('create_ticket')
                 .setLabel(config.ticketButtonLabel || 'Create Ticket')
                 .setStyle(ButtonStyle.Primary)
-                .setEmoji(''),
+                .setEmoji('📩'),
         );
 
         await panelMsg.edit({ embeds: [updatedEmbed], components: [button] });

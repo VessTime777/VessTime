@@ -25,8 +25,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Not a Ticket Channel",
-                            "This command can only be used in a valid ticket channel.",
+                            "Это не канал продажи билетов",
+                            "Эта команда может быть использована только в действующем канале подачи заявок.",
                         ),
                     ],
                 });
@@ -36,8 +36,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Permission Denied",
-                            "You need the `Manage Channels` permission or the configured `Ticket Staff Role` to claim tickets.",
+                            "В разрешении отказано",
+                            "Вам нужен `Управление каналами` разрешение или настроенный `Роль билетного персонала` чтобы получить билеты.",
                         ),
                     ],
                 });
@@ -47,7 +47,7 @@ export default {
             const result = await claimTicket(channel, interaction.user);
             
             if (!result.success) {
-                logger.warn('Ticket claim failed - not a valid ticket channel', {
+                logger.warn('Не удалось подать заявку на получение билета - недействительный канал получения билета', {
                     userId: interaction.user.id,
                     channelId: channel.id,
                     guildId: interaction.guildId,
@@ -56,8 +56,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Not a Ticket Channel",
-                            result.error || "This command can only be used in a valid ticket channel.",
+                            "Это не канал продажи билетов",
+                            result.error || "Эта команда может быть использована только в действующем канале подачи заявок.",
                         ),
                     ],
                 });
@@ -66,13 +66,13 @@ export default {
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     successEmbed(
-                        "Ticket Claimed!",
-                        "You have successfully claimed this ticket.",
+                        "Тикет был создан!",
+                        "Вы успешно воспользовались этим билетом.",
                     ),
                 ],
             });
 
-            logger.info('Ticket claimed successfully', {
+            logger.info('Билет был успешно востребован', {
                 userId: interaction.user.id,
                 userTag: interaction.user.tag,
                 channelId: channel.id,
@@ -82,7 +82,7 @@ export default {
             });
 
         } catch (error) {
-            logger.error('Error executing claim command', {
+            logger.error('Ошибка при выполнении команды утверждения', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,

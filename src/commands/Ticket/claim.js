@@ -8,8 +8,8 @@ import { getTicketPermissionContext } from '../../utils/ticketPermissions.js';
 import { claimTicket } from '../../services/ticket.js';
 export default {
     data: new SlashCommandBuilder()
-        .setName("претензия")
-        .setDescription("Запрашивает открытый билет, назначая его вам.")
+        .setName("claim")
+        .setDescription("Claims an open ticket, assigning it to you.")
         .setDMPermission(false),
 
     async execute(interaction, guildConfig, client) {
@@ -25,8 +25,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал продажи билетов",
-                            "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -36,8 +36,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "В разрешении отказано",
-                            "Вам нужен `Управление каналами` разрешение или настроенный `Роль билетного персонала` чтобы получить билеты.",
+                            "Permission Denied",
+                            "You need the `Manage Channels` permission or the configured `Ticket Staff Role` to claim tickets.",
                         ),
                     ],
                 });
@@ -47,7 +47,7 @@ export default {
             const result = await claimTicket(channel, interaction.user);
             
             if (!result.success) {
-                logger.warn('Не удалось подать заявку на получение билета - недействительный канал получения билета', {
+                logger.warn('Ticket claim failed - not a valid ticket channel', {
                     userId: interaction.user.id,
                     channelId: channel.id,
                     guildId: interaction.guildId,
@@ -56,8 +56,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал продажи билетов",
-                            result.error || "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            result.error || "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -66,13 +66,13 @@ export default {
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     successEmbed(
-                        "Тикет был создан!",
-                        "Вы успешно воспользовались этим билетом.",
+                        "Ticket Claimed!",
+                        "You have successfully claimed this ticket.",
                     ),
                 ],
             });
 
-            logger.info('Билет был успешно востребован', {
+            logger.info('Ticket claimed successfully', {
                 userId: interaction.user.id,
                 userTag: interaction.user.tag,
                 channelId: channel.id,
@@ -82,7 +82,7 @@ export default {
             });
 
         } catch (error) {
-            logger.error('Ошибка при выполнении команды утверждения', {
+            logger.error('Error executing claim command', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,
@@ -91,12 +91,9 @@ export default {
                 commandName: 'claim'
             });
             await handleInteractionError(interaction, error, {
-                commandName: 'претензия',
+                commandName: 'claim',
                 source: 'ticket_claim_command'
             });
         }
     },
 };
-
-
-

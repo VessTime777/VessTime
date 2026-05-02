@@ -163,7 +163,7 @@ description: panelMessage,
                     .setCustomId("create_ticket")
 .setLabel(buttonLabel)
                     .setStyle(ButtonStyle.Primary)
-                    .setEmoji(""),
+                    .setEmoji("📩"),
             );
 
             try {
@@ -331,6 +331,3 @@ description: panelMessage,
         }
     }
 };
-
-
-

@@ -8,8 +8,8 @@ import { getTicketPermissionContext } from '../../utils/ticketPermissions.js';
 import { claimTicket } from '../../services/ticket.js';
 export default {
     data: new SlashCommandBuilder()
-        .setName("claim")
-        .setDescription("Claims an open ticket, assigning it to you.")
+        .setName("претензия")
+        .setDescription("Запрашивает открытый билет, назначая его вам.")
         .setDMPermission(false),
 
     async execute(interaction, guildConfig, client) {
@@ -91,7 +91,7 @@ export default {
                 commandName: 'claim'
             });
             await handleInteractionError(interaction, error, {
-                commandName: 'claim',
+                commandName: 'претензия',
                 source: 'ticket_claim_command'
             });
         }

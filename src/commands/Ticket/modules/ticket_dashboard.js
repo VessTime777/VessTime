@@ -48,18 +48,18 @@ function buildDashboardEmbed(config, guild) {
         .setDescription(`Manage ticket system settings for **${guild.name}**.\nSelect an option below to modify a setting.`)
         .setColor(getColor('info'))
         .addFields(
-            { name: '📢 Panel Channel', value: panelChannel, inline: true },
-            { name: '🛡️ Staff Role', value: staffRole, inline: true },
+            { name: '📢 Канал панели', value: panelChannel, inline: true },
+            { name: '🛡️ Роль персонала', value: staffRole, inline: true },
             { name: '\u200B', value: '\u200B', inline: true },
-            { name: '📁 Open Tickets Category', value: openCategory, inline: true },
-            { name: '📂 Closed Tickets Category', value: closedCategory, inline: true },
+            { name: '📁 Открытые билеты Category', value: openCategory, inline: true },
+            { name: '📂 Закрытые билеты Category', value: closedCategory, inline: true },
             { name: '\u200B', value: '\u200B', inline: true },
-            { name: '📝 Panel Message', value: panelMsg, inline: false },
-            { name: '🏷️ Button Label', value: btnLabel, inline: true },
-            { name: '🔢 Max Tickets/User', value: String(config.maxTicketsPerUser || 3), inline: true },
+            { name: '📝 Сообщение на панели управления', value: panelMsg, inline: false },
+            { name: '🏷️ Название кнопки', value: btnLabel, inline: true },
+            { name: '🔢 Максимальное количество билетов на пользователя', value: String(config.maxTicketsPerUser || 3), inline: true },
             { name: '📬 DM on Close', value: config.dmOnClose !== false ? '✅ Enabled' : '❌ Disabled', inline: true },
-            { name: '🎫 Ticket Logs Channel', value: ticketLogsChannel, inline: true },
-            { name: '📜 Transcript Channel', value: transcriptChannel, inline: true },
+            { name: '🎫 Канал регистрации заявок', value: ticketLogsChannel, inline: true },
+            { name: '📜 Канал расшифровки', value: transcriptChannel, inline: true },
         )
         .setFooter({ text: 'Select an option below • Dashboard closes after 10 minutes of inactivity' })
         .setTimestamp();

@@ -8,13 +8,13 @@ import { getTicketPermissionContext } from '../../utils/ticketPermissions.js';
 import { closeTicket } from '../../services/ticket.js';
 export default {
     data: new SlashCommandBuilder()
-        .setName("close")
-        .setDescription("Closes the current ticket.")
+        .setName("закрывать")
+        .setDescription("Закрывает текущий билет.")
         .setDMPermission(false)
         .addStringOption((option) =>
             option
-                .setName("reason")
-                .setDescription("The reason for closing the ticket.")
+                .setName("причина")
+                .setDescription("Причина закрытия билета.")
                 .setRequired(false),
         ),
 
@@ -31,8 +31,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Not a Ticket Channel",
-                            "This command can only be used in a valid ticket channel.",
+                            "Это не канал продажи билетов",
+                            "Эта команда может быть использована только в действующем канале подачи заявок.",
                         ),
                     ],
                 });
@@ -42,8 +42,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Permission Denied",
-                            "You need the `Manage Channels` permission, the configured `Ticket Staff Role`, or be the ticket creator to close this ticket.",
+                            "В разрешении отказано",
+                            "Чтобы закрыть этот запрос, вам необходимо разрешение 'Управлять каналами', настроенная 'Роль сотрудника support' или быть создателем заявки.",
                         ),
                     ],
                 });
@@ -57,7 +57,7 @@ export default {
             const result = await closeTicket(channel, interaction.user, reason);
             
             if (!result.success) {
-                logger.warn('Ticket close failed - not a valid ticket channel', {
+                logger.warn('Не удалось закрыть тикет - недействительный канал подачи тикета', {
                     userId: interaction.user.id,
                     channelId: channel.id,
                     guildId: interaction.guildId,
@@ -66,8 +66,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Not a Ticket Channel",
-                            result.error || "This command can only be used in a valid ticket channel.",
+                            "Это не канал продажи билетов",
+                            result.error || "Эта команда может быть использована только в действующем канале подачи заявок.",
                         ),
                     ],
                 });
@@ -76,8 +76,8 @@ export default {
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     successEmbed(
-                        "Ticket Closed!",
-                        "This ticket has been closed successfully.",
+                        "Билет закрыт!",
+                        "Этот запрос был успешно закрыт.",
                     ),
                 ],
             });

@@ -113,19 +113,19 @@ function buildButtonRow(guildConfig, guildId, disabled = false) {
     return new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setCustomId(`ticket_cfg_dm_toggle_${guildId}`)
-            .setLabel('DM on Close')
+            .setLabel('МАРКА на близком расстоянии')
             .setStyle(dmEnabled ? ButtonStyle.Success : ButtonStyle.Danger)
             .setEmoji(dmEnabled ? '📬' : '📭')
             .setDisabled(disabled),
         new ButtonBuilder()
             .setCustomId(`ticket_cfg_staff_role_btn_${guildId}`)
-            .setLabel('Staff Role')
+            .setLabel('Роль персонала')
             .setStyle(ButtonStyle.Secondary)
             .setEmoji('🛡️')
             .setDisabled(disabled),
         new ButtonBuilder()
             .setCustomId(`ticket_cfg_delete_${guildId}`)
-            .setLabel('Delete System')
+            .setLabel('Удалить систему')
             .setStyle(ButtonStyle.Danger)
             .setEmoji('🗑️')
             .setDisabled(disabled),
@@ -383,11 +383,11 @@ async function handlePanelMessage(selectInteraction, rootInteraction, guildConfi
     await submitted.reply({
         embeds: [
             successEmbed(
-                '✅ Panel Message Updated',
-                `The panel message has been updated.${
+                '✅ Обновлено сообщение на панели управления',
+                `Сообщение на панели было обновлено.${
                     panelUpdated
-                        ? '\nThe live ticket panel has also been refreshed.'
-                        : '\n> **Note:** The live panel could not be located. The new message will apply the next time you run `/ticket setup`.'
+                        ? '\nПанель "Живые билеты" также была обновлена.'
+                        : '\n> **Note:** Не удалось найти интерактивную панель. Новое сообщение появится при следующем запуске `/ticket setup`.'
                 }`,
             ),
         ],
@@ -438,11 +438,11 @@ async function handleButtonLabel(selectInteraction, rootInteraction, guildConfig
     await submitted.reply({
         embeds: [
             successEmbed(
-                '✅ Button Label Updated',
-                `Button label changed to \`${newLabel}\`.${
+                '✅ Обновлена надпись на кнопке',
+                `Надпись на кнопке изменена на \`${newLabel}\`.${
                     panelUpdated
-                        ? '\nThe live ticket panel button has also been updated.'
-                        : '\n> **Note:** The live panel could not be located. The new label will apply the next time you run `/ticket setup`.'
+                        ? '\nКнопка на панели "Живые билеты" также была обновлена.'
+                        : '\n> **Note:** Не удалось найти интерактивную панель. Новая метка будет применена при следующем запуске `/ticket setup`.'
                 }`,
             ),
         ],
@@ -467,9 +467,9 @@ async function handleStaffRole(selectInteraction, rootInteraction, guildConfig, 
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('🛡️ Change Staff Role')
+                .setTitle('🛡️ Измените роль персонала')
                 .setDescription(
-                    `**Current:** ${guildConfig.ticketStaffRoleId ? `<@&${guildConfig.ticketStaffRoleId}>` : '`Not set`'}\n\nSelect the role that should have staff access to manage tickets.`,
+                    `**Current:** ${guildConfig.ticketStaffRoleId ? `<@&${guildConfig.ticketStaffRoleId}>` : '`Not set`'}\n\nВыберите роль, у сотрудников которой должен быть доступ к управлению заявками.`,
                 )
                 .setColor(getColor('info')),
         ],
@@ -493,7 +493,7 @@ async function handleStaffRole(selectInteraction, rootInteraction, guildConfig, 
         await client.db.set(getGuildConfigKey(guildId), guildConfig);
 
         await roleInteraction.followUp({
-            embeds: [successEmbed('✅ Staff Role Updated', `Staff role set to ${role}.`)],
+            embeds: [successEmbed('✅ Обновлена роль персонала', `Роль персонала установлена на ${role}.`)],
             flags: MessageFlags.Ephemeral,
         });
 
@@ -504,7 +504,7 @@ async function handleStaffRole(selectInteraction, rootInteraction, guildConfig, 
         if (reason === 'time' && collected.size === 0) {
             selectInteraction
                 .followUp({
-                    embeds: [errorEmbed('Timed Out', 'No role was selected. The staff role was not changed.')],
+                    embeds: [errorEmbed('Timed Out', 'Роль не была выбрана. Роль персонала не была изменена.')],
                     flags: MessageFlags.Ephemeral,
                 })
                 .catch(() => {});
@@ -528,9 +528,9 @@ async function handleOpenCategory(selectInteraction, rootInteraction, guildConfi
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('📁 Change Open Tickets Category')
+                .setTitle('📁 Изменить категорию открытых билетов')
                 .setDescription(
-                    `**Current:** ${guildConfig.ticketCategoryId ? `<#${guildConfig.ticketCategoryId}>` : '`Not set`'}\n\nSelect the category where new tickets will be created.`,
+                    `**Current:** ${guildConfig.ticketCategoryId ? `<#${guildConfig.ticketCategoryId}>` : '`Not set`'}\n\nВыберите категорию, в которой будут созданы новые билеты.`,
                 )
                 .setColor(getColor('info')),
         ],
@@ -556,8 +556,8 @@ async function handleOpenCategory(selectInteraction, rootInteraction, guildConfi
         await catInteraction.followUp({
             embeds: [
                 successEmbed(
-                    '✅ Open Category Updated',
-                    `New tickets will now be created in **${category.name}**.`,
+                    '✅ Обновлена открытая категория',
+                    `Теперь новые билеты будут созданы в **${category.name}**.`,
                 ),
             ],
             flags: MessageFlags.Ephemeral,
@@ -571,7 +571,7 @@ async function handleOpenCategory(selectInteraction, rootInteraction, guildConfi
             selectInteraction
                 .followUp({
                     embeds: [
-                        errorEmbed('Timed Out', 'No category was selected. The setting was not changed.'),
+                        errorEmbed('Timed Out', 'Категория не была выбрана. Настройки не были изменены.'),
                     ],
                     flags: MessageFlags.Ephemeral,
                 })
@@ -602,9 +602,9 @@ async function handleClosedCategory(
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('📂 Change Closed Tickets Category')
+                .setTitle('📂 Изменить категорию закрытых билетов')
                 .setDescription(
-                    `**Current:** ${guildConfig.ticketClosedCategoryId ? `<#${guildConfig.ticketClosedCategoryId}>` : '`Not set`'}\n\nSelect the category where closed tickets will be moved.`,
+                    `**Current:** ${guildConfig.ticketClosedCategoryId ? `<#${guildConfig.ticketClosedCategoryId}>` : '`Not set`'}\n\nВыберите категорию, в которую будут перемещены закрытые билеты.`,
                 )
                 .setColor(getColor('info')),
         ],
@@ -630,8 +630,8 @@ async function handleClosedCategory(
         await catInteraction.followUp({
             embeds: [
                 successEmbed(
-                    '✅ Closed Category Updated',
-                    `Closed tickets will now be moved to **${category.name}**.`,
+                    '✅ Обновлена закрытая категория',
+                    `Закрытые билеты теперь будут перенесены в **${category.name}**.`,
                 ),
             ],
             flags: MessageFlags.Ephemeral,
@@ -645,7 +645,7 @@ async function handleClosedCategory(
             selectInteraction
                 .followUp({
                     embeds: [
-                        errorEmbed('Timed Out', 'No category was selected. The setting was not changed.'),
+                        errorEmbed('Timed Out', 'Категория не была выбрана. Настройки не были изменены.'),
                     ],
                     flags: MessageFlags.Ephemeral,
                 })
@@ -703,8 +703,8 @@ async function handleMaxTickets(selectInteraction, rootInteraction, guildConfig,
     await submitted.reply({
         embeds: [
             successEmbed(
-                '✅ Max Tickets Updated',
-                `Users can now have at most **${newMax}** open ticket${newMax !== 1 ? 's' : ''} at a time.`,
+                '✅ Обновлено максимальное количество билетов',
+                `Теперь пользователи могут иметь не более **${newMax}** Открытие билеты${newMax !== 1 ? 's' : ''} at a time.`,
             ),
         ],
         flags: MessageFlags.Ephemeral,
@@ -725,8 +725,8 @@ async function handleDmOnClose(btnInteraction, rootInteraction, guildConfig, gui
     await btnInteraction.followUp({
         embeds: [
             successEmbed(
-                '✅ DM on Close Updated',
-                `Users will **${newState ? 'now' : 'no longer'}** receive a DM when their ticket is closed.`,
+                '✅ DM при закрытии Обновлен',
+                `Пользователи будут **${newState ? 'now' : 'no longer'}** получите DM, когда их билет будет закрыт.`,
             ),
         ],
         flags: MessageFlags.Ephemeral,
@@ -749,8 +749,8 @@ async function handleLogsChannel(selectInteraction, rootInteraction, guildConfig
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('🎫 Select Ticket Logs Channel')
-                .setDescription('Choose where ticket feedback, lifecycle events (open, close, claim, etc.), and other logs will be sent.')
+                .setTitle('🎫 Выберите канал регистрации заявок')
+                .setDescription('Выберите, где находится обратная связь по тикету, события жизненного цикла (open, close, claim, etc.), и другие журналы будут отправлены.')
                 .setColor(getColor('info'))
         ],
         components: [new ActionRowBuilder().addComponents(channelSelect)],
@@ -772,7 +772,7 @@ async function handleLogsChannel(selectInteraction, rootInteraction, guildConfig
         await client.db.set(getGuildConfigKey(guildId), guildConfig);
 
         await channelInteraction.followUp({
-            embeds: [successEmbed('✅ Logs Channel Updated', `Ticket logs will be sent to ${channel}`)],
+            embeds: [successEmbed('✅ Обновлен канал регистрации', `Журналы заявок будут отправлены по адресу ${channel}`)],
             flags: MessageFlags.Ephemeral
         });
 
@@ -782,7 +782,7 @@ async function handleLogsChannel(selectInteraction, rootInteraction, guildConfig
     collector.on('end', (collected, reason) => {
         if (reason === 'time' && collected.size === 0) {
             selectInteraction.followUp({
-                embeds: [errorEmbed('Timed Out', 'No channel selected. No changes were made.')],
+                embeds: [errorEmbed('Timed Out', 'Канал не выбран. Никаких изменений внесено не было.')],
                 flags: MessageFlags.Ephemeral
             }).catch(() => {});
         }
@@ -803,8 +803,8 @@ async function handleTranscriptChannel(selectInteraction, rootInteraction, guild
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('📜 Select Transcript Channel')
-                .setDescription('Choose where auto-generated transcripts will be sent when tickets are deleted.')
+                .setTitle('📜 Выберите канал расшифровки')
+                .setDescription('Выберите, куда будут отправляться автоматически сгенерированные стенограммы при удалении заявок.')
                 .setColor(getColor('info'))
         ],
         components: [new ActionRowBuilder().addComponents(channelSelect)],
@@ -826,7 +826,7 @@ async function handleTranscriptChannel(selectInteraction, rootInteraction, guild
         await client.db.set(getGuildConfigKey(guildId), guildConfig);
 
         await channelInteraction.followUp({
-            embeds: [successEmbed('✅ Transcript Channel Updated', `Transcripts will be sent to ${channel}`)],
+            embeds: [successEmbed('✅ Обновлен канал расшифровки', `Стенограммы будут отправлены по адресу ${channel}`)],
             flags: MessageFlags.Ephemeral
         });
 
@@ -836,7 +836,7 @@ async function handleTranscriptChannel(selectInteraction, rootInteraction, guild
     collector.on('end', (collected, reason) => {
         if (reason === 'time' && collected.size === 0) {
             selectInteraction.followUp({
-                embeds: [errorEmbed('Timed Out', 'No channel selected. No changes were made.')],
+                embeds: [errorEmbed('Timed Out', 'Канал не выбран. Никаких изменений внесено не было.')],
                 flags: MessageFlags.Ephemeral
             }).catch(() => {});
         }
@@ -858,7 +858,7 @@ async function handleCheckUser(selectInteraction, rootInteraction, guildConfig, 
     await selectInteraction.followUp({
         embeds: [
             new EmbedBuilder()
-                .setTitle('🔍 Check User Tickets')
+                .setTitle('🔍 Проверять заявки пользователей')
                 .setDescription('Select a user to view their current open ticket count.')
                 .setColor(getColor('info')),
         ],
@@ -889,8 +889,8 @@ async function handleCheckUser(selectInteraction, rootInteraction, guildConfig, 
                         `**Open Tickets:** ${openCount} / ${maxTickets}\n` +
                             `**Remaining:** ${Math.max(0, maxTickets - openCount)}\n\n` +
                             (atLimit
-                                ? '⚠️ This user has reached their ticket limit.'
-                                : '✅ This user can still open more tickets.'),
+                                ? '⚠️ Этот пользователь исчерпал лимит своих билетов.'
+                                : '✅ Этот пользователь все еще может открывать дополнительные заявки.'),
                     )
                     .setColor(atLimit ? getColor('error') : getColor('success'))
                     .setThumbnail(targetUser.displayAvatarURL({ size: 64 }))
@@ -1016,7 +1016,7 @@ async function handleDeleteSystem(btnInteraction, rootInteraction, guildConfig, 
     await submitted.followUp({
         embeds: [
             successEmbed(
-                '✅ Ticket System Deleted',
+                '✅ Система тикетов удалена',
                 'All ticket system configuration has been cleared. Run `/ticket setup` to set it up again.',
             ),
         ],
@@ -1026,7 +1026,7 @@ async function handleDeleteSystem(btnInteraction, rootInteraction, guildConfig, 
     await InteractionHelper.safeEditReply(rootInteraction, {
         embeds: [
             new EmbedBuilder()
-                .setTitle('🗑️ Ticket System Deleted')
+                .setTitle('🗑️ Система тикетов удалена')
                 .setDescription('The ticket system configuration has been cleared.')
                 .setColor(getColor('error'))
                 .setTimestamp(),

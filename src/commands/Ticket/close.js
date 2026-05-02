@@ -9,12 +9,12 @@ import { closeTicket } from '../../services/ticket.js';
 export default {
     data: new SlashCommandBuilder()
         .setName("close")
-        .setDescription("Закрывает текущий билет.")
+        .setDescription("Closes the current ticket.")
         .setDMPermission(false)
         .addStringOption((option) =>
             option
                 .setName("reason")
-                .setDescription("Причина закрытия билета.")
+                .setDescription("The reason for closing the ticket.")
                 .setRequired(false),
         ),
 
@@ -31,8 +31,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал билетов",
-                            "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -42,8 +42,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "В разрешении отказано",
-                            "Вам требуется разрешение `Управлять каналами`, настроенное `Роль билетного персонала`, или быть создателем заявки, чтобы закрыть эту заявку.",
+                            "Permission Denied",
+                            "You need the `Manage Channels` permission, the configured `Ticket Staff Role`, or be the ticket creator to close this ticket.",
                         ),
                     ],
                 });
@@ -52,12 +52,12 @@ export default {
             const channel = interaction.channel;
             const reason =
                 interaction.options?.getString("reason") ||
-                "Закрыто с помощью команды без конкретной причины.";
+                "Closed via command without a specific reason.";
 
             const result = await closeTicket(channel, interaction.user, reason);
             
             if (!result.success) {
-                logger.warn('Не удалось закрыть тикет - недействительный канал подачи тикета', {
+                logger.warn('Ticket close failed - not a valid ticket channel', {
                     userId: interaction.user.id,
                     channelId: channel.id,
                     guildId: interaction.guildId,
@@ -66,8 +66,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "Это не канал билетов",
-                            result.error || "Эта команда может быть использована только в действующем канале подачи заявок.",
+                            "Not a Ticket Channel",
+                            result.error || "This command can only be used in a valid ticket channel.",
                         ),
                     ],
                 });
@@ -76,13 +76,13 @@ export default {
             await InteractionHelper.safeEditReply(interaction, {
                 embeds: [
                     successEmbed(
-                        "Билет закрыт!",
-                        "Этот запрос был успешно закрыт.",
+                        "Ticket Closed!",
+                        "This ticket has been closed successfully.",
                     ),
                 ],
             });
 
-            logger.info('Билет успешно закрыт', {
+            logger.info('Ticket closed successfully', {
                 userId: interaction.user.id,
                 userTag: interaction.user.tag,
                 channelId: channel.id,
@@ -93,7 +93,7 @@ export default {
             });
 
         } catch (error) {
-            logger.error('Ошибка при выполнении команды закрытия', {
+            logger.error('Error executing close command', {
                 error: error.message,
                 stack: error.stack,
                 userId: interaction.user.id,

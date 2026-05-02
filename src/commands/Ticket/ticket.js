@@ -10,20 +10,20 @@ import ticketConfig from './modules/ticket_dashboard.js';
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("Тикет")
-        .setDescription("Управляет системой тикетов сервера.")
+        .setName("ticket")
+        .setDescription("Manages the server's ticket system.")
         .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("setup")
                 .setDescription(
-                    "Настраивает панель создания заявки в указанном канале.",
+                    "Sets up the ticket creation panel in a specified channel.",
                 )
                 .addChannelOption((option) =>
                     option
 .setName("panel_channel")
                         .setDescription(
-                            "Канал, по которому будет отправлена панель заявок.",
+                            "The channel where the ticket panel will be sent.",
                         )
                         .addChannelTypes(ChannelType.GuildText)
                         .setRequired(true),
@@ -33,7 +33,7 @@ export default {
                     option
                         .setName("panel_message")
                         .setDescription(
-                            "Основное сообщение/описание для панели управления билетами.",
+                            "The main message/description for the ticket panel.",
                         )
                         .setRequired(true),
                 )
@@ -41,7 +41,7 @@ export default {
                     option
                         .setName("button_label")
                         .setDescription(
-                            "Метка для кнопки создания заявки (by default: Create a request)",
+                            "The label for the ticket creation button (default: Create Ticket)",
                         )
                         .setRequired(false),
                 )
@@ -49,7 +49,7 @@ export default {
                     option
                         .setName("category")
                         .setDescription(
-                            "Категория, в которой будут созданы новые билеты (optional).",
+                            "The category where new tickets will be created (optional).",
                         )
                         .addChannelTypes(ChannelType.GuildCategory)
                         .setRequired(false),
@@ -58,7 +58,7 @@ export default {
                     option
                         .setName("closed_category")
                         .setDescription(
-                            "Категория, в которую будут перенесены закрытые билеты (optional).",
+                            "The category where closed tickets will be moved (optional).",
                         )
                         .addChannelTypes(ChannelType.GuildCategory)
                         .setRequired(false),
@@ -67,14 +67,14 @@ export default {
                     option
                         .setName("staff_role")
                         .setDescription(
-                            "Роль, которая может получать доступ к тикетам (optional).",
+                            "The role that can access tickets (optional).",
                         )
                         .setRequired(false),
                 )
                 .addIntegerOption((option) =>
                     option
                         .setName("max_tickets_per_user")
-                        .setDescription("Максимальное количество заявок, которые может создать пользователь (default: 3)")
+                        .setDescription("Maximum number of tickets a user can create (default: 3)")
                         .setMinValue(1)
                         .setMaxValue(10)
                         .setRequired(false),
@@ -82,14 +82,14 @@ export default {
                 .addBooleanOption((option) =>
                     option
                         .setName("dm_on_close")
-                        .setDescription("Отправьте DM пользователю, когда его тикет будет закрыт (default: true)")
+                        .setDescription("Send DM to user when their ticket is closed (default: true)")
                         .setRequired(false),
                 ),
         )
         .addSubcommand((subcommand) =>
             subcommand
                 .setName("dashboard")
-                .setDescription("Откройте панель управления интерактивной системой продажи билетов"),
+                .setDescription("Open the interactive ticket system dashboard"),
         ),
     category: "ticket",
 
@@ -114,8 +114,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            "В разрешении отказано",
-                            "Для этого действия вам необходимо разрешение `Управлять каналами`.",
+                            "Permission Denied",
+                            "You need the `Manage Channels` permission for this action.",
                         ),
                     ],
                 });
@@ -133,8 +133,8 @@ export default {
                 return await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
                         errorEmbed(
-                            'Система продажи билетов уже активирована',
-                            `На этом сервере уже настроена система тикетов (panel in <#${existingConfig.ticketPanelChannelId}>).\n\nНа каждом сервере поддерживается только одна система тикетов. Используйте \`/ticket dashboard\` чтобы отредактировать или обновить существующую настройку, или выберите **Delete System** с приборной панели, чтобы снять его и начать все сначала.`,
+                            'Ticket System Already Active',
+                            `This server already has a ticket system set up (panel in <#${existingConfig.ticketPanelChannelId}>).\n\nOnly one ticket system is supported per server. Use \`/ticket dashboard\` to edit or update the existing setup, or select **Delete System** from the dashboard to remove it and start fresh.`,
                         ),
                     ],
                 });
@@ -153,7 +153,7 @@ const panelMessage = interaction.options.getString("panel_message") || "Click th
 const dmOnClose = interaction.options.getBoolean("dm_on_close") !== false;
 
             const setupEmbed = createEmbed({ 
-                title: "🎫 Заявки в службу поддержки", 
+                title: "🎫 Support Tickets", 
 description: panelMessage,
                 color: getColor('info')
             });
@@ -163,7 +163,7 @@ description: panelMessage,
                     .setCustomId("create_ticket")
 .setLabel(buttonLabel)
                     .setStyle(ButtonStyle.Primary)
-                    .setEmoji(""),
+                    .setEmoji("📩"),
             );
 
             try {
@@ -196,23 +196,23 @@ description: panelMessage,
                 });
             }
 
-                let successMessage = `Панель создания заявки была отправлена по адресу ${panelChannel}. `;
+                let successMessage = `The ticket creation panel has been sent to ${panelChannel}. `;
                 
                 if (categoryChannel) {
-                    successMessage += `Новые билеты будут созданы в **${categoryChannel.name}** категория. `;
+                    successMessage += `New tickets will be created in the **${categoryChannel.name}** category. `;
                 } else {
-                    successMessage += 'Новые билеты будут созданы в новом "Tickets" категория. ';
+                    successMessage += 'New tickets will be created in a new "Tickets" category. ';
                 }
                 
                 if (closedCategoryChannel) {
-                    successMessage += `Закрытые билеты будут перенесены в **${closedCategoryChannel.name}**. `;
+                    successMessage += `Closed tickets will be moved to **${closedCategoryChannel.name}**. `;
                 }
                 
                 if (staffRole) {
-                    successMessage += `**${staffRole.name}** роль будет иметь доступ к билетам. `;
+                    successMessage += `**${staffRole.name}** role will have access to tickets. `;
                 }
                 
-                successMessage += `\n\n**Максимальное количество Билетов на Одного Пользователя:** ${maxTicketsPerUser}\n**DM on Close:** ${dmOnClose ? 'Enabled' : 'Disabled'}`;
+                successMessage += `\n\n**Max Tickets Per User:** ${maxTicketsPerUser}\n**DM on Close:** ${dmOnClose ? 'Enabled' : 'Disabled'}`;
 
                 await InteractionHelper.safeEditReply(interaction, {
                     embeds: [
@@ -237,39 +237,39 @@ description: panelMessage,
                 });
 
                 const logEmbed = createEmbed({
-                    title: "🔧 Настройка билетной системы (Configuration Log)",
-                    description: `Панель управления билетами была настроена в ${panelChannel} около ${interaction.user}.`,
+                    title: "🔧 Ticket System Setup (Configuration Log)",
+                    description: `The ticket panel was set up in ${panelChannel} by ${interaction.user}.`,
                     color: getColor('warning')
                 })
                     .addFields(
                         {
-                            name: "Канал панели",
+                            name: "Panel Channel",
                             value: panelChannel.toString(),
                             inline: true,
                         },
                         {
-                            name: "Категория билета",
+                            name: "Ticket Category",
                             value: categoryChannel
                                 ? categoryChannel.toString()
                                 : "None specified.",
                             inline: true,
                         },
                         {
-                            name: "Закрытая категория",
+                            name: "Closed Category",
                             value: closedCategoryChannel
                                 ? closedCategoryChannel.toString()
                                 : "None specified.",
                             inline: true,
                         },
                         {
-                            name: "Персонал роль",
+                            name: "Staff Role",
                             value: staffRole
                                 ? staffRole.toString()
                                 : "None specified.",
                             inline: true,
                         },
                         {
-                            name: "Максимальное количество Билетов на Одного Пользователя",
+                            name: "Max Tickets Per User",
                             value: maxTicketsPerUser.toString(),
                             inline: true,
                         },
@@ -279,7 +279,7 @@ description: panelMessage,
                             inline: true,
                         },
                         {
-                            name: "Модератор",
+                            name: "Moderator",
                             value: `${interaction.user.tag} (${interaction.user.id})`,
                             inline: false,
                         },
@@ -287,7 +287,7 @@ description: panelMessage,
 
 
             } catch (error) {
-                logger.error('Ошибка при настройке билета', {
+                logger.error('Ticket setup error', {
                     error: error.message,
                     stack: error.stack,
                     userId: interaction.user.id,

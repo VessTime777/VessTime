@@ -164,7 +164,7 @@ export async function createInitialHelpMenu(client) {
 
     const bugReportButton = new ButtonBuilder()
         .setCustomId(BUG_REPORT_BUTTON_ID)
-        .setLabel("Report Bug")
+        .setLabel("Report VessTime")
         .setStyle(ButtonStyle.Danger);
     
     const supportButton = new ButtonBuilder()

@@ -44,8 +44,8 @@ function buildDashboardEmbed(config, guild) {
     const btnLabel = `\`${config.ticketButtonLabel || 'Create Ticket'}\``;
 
     return new EmbedBuilder()
-        .setTitle('🎫 Ticket System Dashboard')
-        .setDescription(`Manage ticket system settings for **${guild.name}**.\nSelect an option below to modify a setting.`)
+        .setTitle('🎫 Панель управления билетной системой')
+        .setDescription(`Управление настройками системы тикетов для **${guild.name}**.\nВыберите опцию ниже, чтобы изменить настройку.`)
         .setColor(getColor('info'))
         .addFields(
             { name: '📢 Канал панели', value: panelChannel, inline: true },
@@ -61,48 +61,48 @@ function buildDashboardEmbed(config, guild) {
             { name: '🎫 Канал регистрации заявок', value: ticketLogsChannel, inline: true },
             { name: '📜 Канал расшифровки', value: transcriptChannel, inline: true },
         )
-        .setFooter({ text: 'Select an option below • Dashboard closes after 10 minutes of inactivity' })
+        .setFooter({ text: 'Выберите опцию ниже • Панель мониторинга закрывается после 10 минут бездействия' })
         .setTimestamp();
 }
 
 function buildSelectMenu(guildId) {
     return new StringSelectMenuBuilder()
         .setCustomId(`ticket_config_${guildId}`)
-        .setPlaceholder('Select a setting to configure...')
+        .setPlaceholder('Выберите параметр для настройки...')
         .addOptions(
             new StringSelectMenuOptionBuilder()
-                .setLabel('Edit Panel Message')
-                .setDescription('Change the message displayed on the ticket creation panel')
+                .setLabel('Редактировать сообщение на панели управления')
+                .setDescription('Измените сообщение, отображаемое на панели создания заявки')
                 .setValue('panel_message')
                 .setEmoji('📝'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Edit Button Label')
-                .setDescription('Change the label on the Create Ticket button')
+                .setLabel('Редактировать метку кнопки')
+                .setDescription('Измените надпись на кнопке Создать заявку')
                 .setValue('button_label')
                 .setEmoji('🏷️'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Change Open Tickets Category')
-                .setDescription('Category where new tickets are created')
+                .setLabel('Изменить категорию открытых билетов')
+                .setDescription('Категория, в которой создаются новые билеты')
                 .setValue('open_category')
                 .setEmoji('📁'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Change Closed Tickets Category')
-                .setDescription('Category where closed tickets are moved')
+                .setLabel('Изменить категорию закрытых билетов')
+                .setDescription('Категория, в которую перемещаются закрытые билеты')
                 .setValue('closed_category')
                 .setEmoji('📂'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Set Max Tickets per User')
-                .setDescription('Limit how many open tickets one user can have at once')
+                .setLabel('Установите максимальное количество билетов для каждого пользователя')
+                .setDescription('Ограничьте количество открытых заявок, которые может иметь один пользователь одновременно')
                 .setValue('max_tickets')
                 .setEmoji('🔢'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Set Ticket Logs Channel')
-                .setDescription('Channel to receive ticket feedback, lifecycle events, and logs')
+                .setLabel('Установите канал регистрации заявок')
+                .setDescription('Канал для получения отзывов о заявках, событий жизненного цикла и журналов')
                 .setValue('logs_channel')
                 .setEmoji('🎫'),
             new StringSelectMenuOptionBuilder()
-                .setLabel('Set Transcript Channel')
-                .setDescription('Channel to receive auto-generated transcripts on deletion')
+                .setLabel('Установить канал расшифровки')
+                .setDescription('Канал для получения автоматически сгенерированных расшифровок при удалении')
                 .setValue('transcript_channel')
                 .setEmoji('📜'),
         );

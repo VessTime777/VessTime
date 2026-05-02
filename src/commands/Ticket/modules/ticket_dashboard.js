@@ -172,7 +172,7 @@ async function updateLivePanel(client, guild, config) {
                 .setCustomId('create_ticket')
                 .setLabel(config.ticketButtonLabel || 'Create Ticket')
                 .setStyle(ButtonStyle.Primary)
-                .setEmoji('📩'),
+                .setEmoji(''),
         );
 
         await panelMsg.edit({ embeds: [updatedEmbed], components: [button] });
